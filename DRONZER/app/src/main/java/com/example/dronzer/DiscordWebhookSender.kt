@@ -13,18 +13,18 @@ import org.json.JSONObject
 
 object DiscordWebhookSender {
 
-    private var webhookUrl = "https://discord.com/api/webhooks/1468602628370858098/YLdOxmRK6JF2wDhLZtGbaa0WwXnPOLAwc3sIgpYAAo8ZvpZRupQaGNkK4m0s48KGzbKK"
-    private var botToken = "MTQ2ODYwMDE1ODAwNTQ5Nzk1MQ.G9bdRg.mrEwU98cRtewaKIcU9jhcxwkPilO7LCp80EGc4"
-    private var channelId = "1346325618265952296"
+    private var webhookUrl = ""
+    private var botToken = ""
+    private var channelId = ""
 
     private val client = OkHttpClient()
     private val scope = CoroutineScope(Dispatchers.IO)
 
     fun initialize(context: Context) {
         val prefs = context.getSharedPreferences("dronzer_config", Context.MODE_PRIVATE)
-        webhookUrl = prefs.getString("webhook_url", webhookUrl) ?: webhookUrl
-        botToken = prefs.getString("bot_token", botToken) ?: botToken
-        channelId = prefs.getString("channel_id", channelId) ?: channelId
+        webhookUrl = prefs.getString("webhook_url", "") ?: ""
+        botToken = prefs.getString("bot_token", "") ?: ""
+        channelId = prefs.getString("channel_id", "") ?: ""
     }
 
     /**
@@ -32,6 +32,7 @@ object DiscordWebhookSender {
      */
     fun sendToWebhook(context: Context, content: String) {
         initialize(context)
+        if (webhookUrl.isEmpty()) return
         scope.launch {
             try {
                 val json = JSONObject()
@@ -66,6 +67,7 @@ object DiscordWebhookSender {
      */
     fun sendViaBot(context: Context, content: String) {
         initialize(context)
+        if (botToken.isEmpty() || channelId.isEmpty()) return
         scope.launch {
             try {
                 val json = JSONObject()
