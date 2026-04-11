@@ -44,57 +44,68 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 
 <details>
   <summary>:zap: Camera Access</summary>
-  <img src="assets/camera.jpeg" width="100%">
+  <br>
+  <img src="assets/camera.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Microphone Access</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/audiorec.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Gallery Access</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/gallery.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Contacts</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/contacts.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Calllogs</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/calllogs.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Device Specifications</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/devicemanager.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Keylogging</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/camera.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Screen Recording</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/screenrec.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Messages</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/messages.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Location</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/location.jpeg" width="300">
 </details>
 
 <details>
   <summary>:zap: Multi Device Support</summary>
-  <img src="https://github-readme-stats.vercel.app/api?username=Vivekagent47&&show_icons=true&title_color=222222&icon_color=03A87C&text_color=333333&bg_color=ffffff">
+  <br>
+  <img src="assets/devicemanager.jpeg" width="300">
 </details>
 
 ### Machine:
