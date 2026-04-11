@@ -147,7 +147,7 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 
 <div align="center">
   <h2><b>WHAT IS THIS THING I SEE WHEN WEBHOOK RECEIVES A SIGNAL??</b></h2>
-  <img src="assets/GUI.png" width="80%">
+  <img src="assets/GUI.png" width="40%">
 </div>
 
 ### ***It is asking to launch a GUI on host computer where user can monitor everything dynamically***
