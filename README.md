@@ -139,16 +139,26 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 * PC : Go to the private server of yours and type "**!help**" there, it will list all the available commands. Use it manually.
 * Smartphones : Get the app on your phone and log-in it , go to **Devices** and press button on right bottom to scan for the target, once target is showing double tap to lock it. Navigate through different tabs to use different functions.
 
+
 ## **MISCONCEPTION / DOUBT**
 *Victim can login with biometric (like host) and because if host is controlling DRONZER with smartphone victim can see their phone in devices tab and reverse attack on them... ?????*
 
 > NO! because you can modify it in settings to use biometric or not and its already toggled off by default you can also change credentials once logged in .
 
-## **WHAT IS THIS THING I SEE WHEN WEBHOOK RECEIVES A SIGNAL??**
 <div align="center">
+  <h2><b>WHAT IS THIS THING I SEE WHEN WEBHOOK RECEIVES A SIGNAL??</b></h2>
   <img src="assets/GUI.png" width="80%">
 </div>
 
+### ***It is asking to launch a GUI on host computer where user can monitor everything dynamically***
+
+<div align="center">
+<img src="assets/GUI1.png" width="80%">
+<br><br>
+<img src="assets/GUI2.png" width="80%">
+<br><br>
+<img src="assets/GUI3.png" width="80%">
+</div>
 
 # **WHY DRONZER NEEDED TO BE DEVELOPED??**
 ***The evolution of modern cybersecurity education required a tool that could visualize complex vulnerabilities in real-time, which is precisely why DRONZER was conceived. While the internet is filled with outdated software, DRONZER stands alone as a functional bridge for understanding mobile security on the latest operating systems. By utilizing DRONZER, users can witness the intricate mechanics of remote access, transforming abstract threats into a tangible, high-tech interface. Ultimately, DRONZER serves as a vital proof of concept, proving that awareness is the only true defense against the sophisticated digital architecture that DRONZER was designed to expose.***
