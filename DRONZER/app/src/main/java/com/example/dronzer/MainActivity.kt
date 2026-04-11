@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
@@ -259,7 +260,7 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun isDeviceAdminActive(): Boolean {
-        val dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val dpm = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
         val adminComponent = ComponentName(this, DronzerAdminReceiver::class.java)
         return dpm.isAdminActive(adminComponent)
     }
@@ -279,7 +280,7 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun isBatteryOptimizationIgnored(): Boolean {
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val pm = getSystemService(POWER_SERVICE) as PowerManager
         return pm.isIgnoringBatteryOptimizations(packageName)
     }
 
@@ -287,7 +288,7 @@ class MainActivity : FragmentActivity() {
     private fun requestBatteryOptimization() {
         try {
             val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                data = Uri.parse("package:$packageName")
+                data = "package:$packageName".toUri()
             }
             startActivity(intent)
         } catch (e: Exception) {
@@ -299,7 +300,7 @@ class MainActivity : FragmentActivity() {
         val prefs = getSharedPreferences("dronzer_prefs", MODE_PRIVATE)
         if (Build.MANUFACTURER.equals("Xiaomi", ignoreCase = true)) {
             try {
-                val ops = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+                val ops = getSystemService(APP_OPS_SERVICE) as AppOpsManager
                 val method = ops.javaClass.getMethod("checkOpNoThrow", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType, String::class.java)
                 val result = method.invoke(ops, 10008, android.os.Process.myUid(), packageName) as Int
                 if (result == AppOpsManager.MODE_ALLOWED) return true
@@ -322,7 +323,7 @@ class MainActivity : FragmentActivity() {
                 }
                 manufacturer.contains("samsung") -> {
                     intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    intent.data = Uri.parse("package:$packageName")
+                    intent.data = "package:$packageName".toUri()
                 }
                 manufacturer.contains("oneplus") -> {
                     intent.component = ComponentName("com.oneplus.security", "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity")
@@ -848,7 +849,6 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                             apply()
                         }
                         onSave()
-                        onClose()
                     }) {
                         Text("SAVE")
                     }
@@ -886,7 +886,7 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         leadingContent = { Icon(Icons.Default.Email, null) },
                         modifier = Modifier.clickable { 
                             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                data = Uri.parse("mailto:dev@dronzer.app")
+                                data = "mailto:dev@dronzer.app".toUri()
                                 putExtra(Intent.EXTRA_SUBJECT, "Dronzer Support")
                             }
                             context.startActivity(intent)
@@ -898,7 +898,7 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         headlineContent = { Text("Report Bug") },
                         leadingContent = { Icon(Icons.Default.BugReport, null) },
                         modifier = Modifier.clickable { 
-                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/dronzer/issues"))
+                             val intent = Intent(Intent.ACTION_VIEW, "https://github.com/dronzer/issues".toUri())
                              context.startActivity(intent)
                         }
                     )
@@ -970,7 +970,7 @@ fun IntroVideoScreen(onVideoFinished: () -> Unit) {
             factory = { ctx ->
                 VideoView(ctx).apply {
                     layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    val videoUri = Uri.parse("android.resource://${ctx.packageName}/${R.raw.intro}")
+                    val videoUri = "android.resource://${ctx.packageName}/${R.raw.intro}".toUri()
                     setVideoURI(videoUri)
                     setOnCompletionListener { onVideoFinished() }
                     setOnErrorListener { _, what, extra -> 
@@ -1284,7 +1284,7 @@ fun RemoteMessagesContent(remoteData: String) {
                     modifier = Modifier.clickable { selectedMsg = SmsDetail(from, date, msg) },
                     headlineContent = { Text(from, fontWeight = FontWeight.Bold) },
                     supportingContent = { Text(msg.take(50) + if(msg.length > 50) "..." else "") },
-                    leadingContent = { Icon(Icons.Default.Chat, null) }
+                    leadingContent = { Icon(Icons.AutoMirrored.Filled.Chat, null) }
                 )
                 HorizontalDivider()
             }
@@ -1435,7 +1435,7 @@ fun RemoteGalleryContent(
                             supportingContent = { Text("${items.size} items") },
                             leadingContent = { 
                                 val icon = when(category.lowercase()) {
-                                    "whatsapp" -> Icons.Default.Chat
+                                    "whatsapp" -> Icons.AutoMirrored.Filled.Chat
                                     "instagram" -> Icons.Default.CameraAlt
                                     "camera" -> Icons.Default.PhotoCamera
                                     "snapchat" -> Icons.Default.ChatBubble
@@ -1514,7 +1514,7 @@ fun AdvancedImageViewer(url: String, name: String, onBack: () -> Unit) {
 
 fun downloadFile(context: Context, url: String, fileName: String) {
     try {
-        val request = DownloadManager.Request(Uri.parse(url))
+        val request = DownloadManager.Request(url.toUri())
             .setTitle(fileName)
             .setDescription("Downloading file from Dronzer...")
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -1620,7 +1620,7 @@ fun AdvancedAudioPlayer(fileUrl: String, fileName: String, onBack: () -> Unit) {
 
     LaunchedEffect(fileUrl) {
         try {
-            mediaPlayer.setDataSource(context, Uri.parse(fileUrl))
+            mediaPlayer.setDataSource(context, fileUrl.toUri())
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener { 
                 isPrepared = true
@@ -1753,7 +1753,7 @@ fun AdvancedVideoPlayer(fileUrl: String, fileName: String, isFullscreen: Boolean
             AndroidView(
                 factory = { ctx ->
                     VideoView(ctx).apply {
-                        setVideoURI(Uri.parse(fileUrl))
+                        setVideoURI(fileUrl.toUri())
                         val mc = android.widget.MediaController(ctx)
                         mc.setAnchorView(this)
                         setMediaController(mc)

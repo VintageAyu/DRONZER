@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.dronzer"
         minSdk = 24
         targetSdk = 35
-        versionCode = 6005
-        versionName = "6.0.06"
+        versionCode = 6007
+        versionName = "6.0.07"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.fragment.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

