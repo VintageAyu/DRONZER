@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Dronzer</string>
+    <string name="accessibility_description">Required for system-level monitoring and background optimization.</string>
+</resources>
