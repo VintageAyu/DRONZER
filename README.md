@@ -121,7 +121,7 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 # **SETUP VIDEO**
 
 <div align="center">
-  <video src="https://github.com/user-attachments/assets/53b97e57-b7d6-4343-a204-a64b9a0a8a80" width="100%" controls muted autoplay loop>
+  <video src="https://github.com/user-attachments/assets/8ad4a089-7ab7-44a6-9b40-6bb49fa08d5f" width="100%" controls muted autoplay loop>
     Your browser does not support the video tag.
   </video>
 </div>
