@@ -144,6 +144,11 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 
 > NO! because you can modify it in settings to use biometric or not and its already toggled off by default you can also change credentials once logged in .
 
+## **WHAT IS THIS THING I SEE WHEN WEBHOOK RECEIVES A SIGNAL??**
+<div align="center">
+  <img src="assets/GUI.png" width="80%">
+</div>
+
 
 # **WHY DRONZER NEEDED TO BE DEVELOPED??**
 ***The evolution of modern cybersecurity education required a tool that could visualize complex vulnerabilities in real-time, which is precisely why DRONZER was conceived. While the internet is filled with outdated software, DRONZER stands alone as a functional bridge for understanding mobile security on the latest operating systems. By utilizing DRONZER, users can witness the intricate mechanics of remote access, transforming abstract threats into a tangible, high-tech interface. Ultimately, DRONZER serves as a vital proof of concept, proving that awareness is the only true defense against the sophisticated digital architecture that DRONZER was designed to expose.***
