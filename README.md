@@ -44,7 +44,7 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 
 <details>
   <summary>:zap: Camera Access</summary>
-  <img src="DRONZER/assets/camera.jpeg" width="100%">
+  <img src="assets/camera.jpeg" width="100%">
 </details>
 
 <details>
