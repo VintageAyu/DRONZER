@@ -12,6 +12,7 @@ captures/
 .cxx/
 
 # --- Android / Build Outputs ---
+
 *.apk
 *.aab
 output.json
@@ -28,6 +29,14 @@ signing.properties
 # --- Cloud & Backend (CRITICAL) ---
 # Prevents leaking Firebase project IDs and API Keys
 google-services.json
+
+
+# IntelliJ
+*.iml
+.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
 
 # --- Dronzer Specific ---
 # If you ever create local test scripts or config backups
