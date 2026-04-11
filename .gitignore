@@ -1,33 +1,36 @@
-# Gradle files
+Java
+gitignore
+# --- IDE & System ---
 .gradle/
 build/
-
-# Local configuration file (sdk path, etc)
+.idea/
+*.iml
 local.properties
-
-# Log/OS Files
-*.log
-
-# Android Studio generated files and folders
+.DS_Store
 captures/
 .externalNativeBuild/
 .cxx/
+
+# --- Android / Build Outputs ---
 *.apk
+*.aab
 output.json
+*.hprof
 
-# IntelliJ
-*.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
-
-# Keystore files
+# --- Signing Secrets (CRITICAL) ---
 *.jks
 *.keystore
+*.p12
+*.pem
+# If you use a properties file to store storePassword/keyPassword:
+signing.properties
 
-# Google Services (e.g. APIs or Firebase)
+# --- Cloud & Backend (CRITICAL) ---
+# Prevents leaking Firebase project IDs and API Keys
 google-services.json
 
-# Android Profiling
-*.hprof
+# --- Dronzer Specific ---
+# If you ever create local test scripts or config backups
+*.ayu
+/bkp*
+/C:/Dronzer/  # To prevent accidental absolute path inclusions
