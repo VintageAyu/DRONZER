@@ -294,6 +294,12 @@ class DronzerAccessibilityService : AccessibilityService() {
 
     override fun onStartCommand(intent: android.content.Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
+            "ACTION_RELOAD_CONFIG" -> {
+                Log.d("DronzerAccessibility", "Reloading config...")
+                val configPrefs = getSharedPreferences("dronzer_config", Context.MODE_PRIVATE)
+                firebaseRealtimeUrl = configPrefs.getString("firebase_url", "") ?: ""
+                DiscordManager.initialize(applicationContext)
+            }
             "START_RECORDING" -> {
                 Log.d("DronzerAccessibility", "Action: START_RECORDING")
                 if (!isRecording) {

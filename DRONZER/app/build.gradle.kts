@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.dronzer"
         minSdk = 24
         targetSdk = 35
-        versionCode = 6007
-        versionName = "6.0.07"
+        versionCode = 6101
+        versionName = "6.1.01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

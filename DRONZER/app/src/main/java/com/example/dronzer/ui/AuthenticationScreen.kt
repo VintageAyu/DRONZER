@@ -48,6 +48,8 @@ fun AuthenticationScreen(onLoginSuccess: () -> Unit) {
     val savedUser = remember { prefs.getString("auth_user", "admin") ?: "admin" }
     val savedPass = remember { prefs.getString("auth_pass", "admin") ?: "admin" }
     val is2faEnabled = remember { prefs.getBoolean("auth_2fa", false) }
+    // Defaulting biometric to false as requested
+    val isBiometricEnabled = remember { prefs.getBoolean("biometric_enabled", false) }
 
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -65,6 +67,8 @@ fun AuthenticationScreen(onLoginSuccess: () -> Unit) {
     }
 
     fun handleBiometricAuth() {
+        if (!isBiometricEnabled) return
+        
         if (context !is FragmentActivity) {
             onLoginSuccess() // Fallback
             return
@@ -173,26 +177,28 @@ fun AuthenticationScreen(onLoginSuccess: () -> Unit) {
                     }
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                if (isBiometricEnabled) {
+                    Spacer(modifier = Modifier.height(32.dp))
 
-                // Fingerprint Visual Logo
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    IconButton(
-                        onClick = { handleBiometricAuth() },
-                        modifier = Modifier
-                            .size(70.dp)
-                            .border(1.dp, bloodRed.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                            .background(bloodRed.copy(alpha = 0.05f), MaterialTheme.shapes.medium)
+                    // Fingerprint Visual Logo
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Fingerprint,
-                            contentDescription = "Biometric Login",
-                            tint = bloodRed,
-                            modifier = Modifier.size(45.dp)
-                        )
+                        IconButton(
+                            onClick = { handleBiometricAuth() },
+                            modifier = Modifier
+                                .size(70.dp)
+                                .border(1.dp, bloodRed.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
+                                .background(bloodRed.copy(alpha = 0.05f), MaterialTheme.shapes.medium)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Fingerprint,
+                                contentDescription = "Biometric Login",
+                                tint = bloodRed,
+                                modifier = Modifier.size(45.dp)
+                            )
+                        }
                     }
                 }
 
@@ -211,7 +217,7 @@ fun AuthenticationScreen(onLoginSuccess: () -> Unit) {
                 Button(
                     onClick = {
                         if (username == savedUser && password == savedPass) {
-                            if (is2faEnabled) {
+                            if (is2faEnabled && isBiometricEnabled) {
                                 val biometricManager = BiometricManager.from(context)
                                 val canAuth = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
                                 if (canAuth == BiometricManager.BIOMETRIC_SUCCESS) {
