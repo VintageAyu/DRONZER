@@ -41,7 +41,7 @@ Firebase Real-time Sync: Acts as a secondary, low-latency data bridge for immedi
 
 Redundant Uplinks: Automatically switches between Firebase and Discord if one endpoint is throttled or blocked.
 
-## **3. FUNCTIONS / COMMANDS**
+## **3. FUNCTIONS / COMMANDS** (*phone screenshots*)
 
 <details>
   <summary>⚡ Camera Access <i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(press me)</i></summary>
@@ -147,10 +147,12 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 
 <div align="center">
   <h2><b>WHAT IS THIS THING I SEE WHEN WEBHOOK RECEIVES A SIGNAL??</b></h2>
-  <img src="assets/GUI.png" width="80%">
+  <img src="assets/GUI.png" width="40%">
 </div>
 
-### ***It is asking to launch a GUI on host computer where user can monitor everything dynamically***
+<div align="center">
+  <h2><b>It is asking to launch a GUI on host computer where user can monitor everything dynamically</b></h2>
+</div>
 
 <div align="center">
 <img src="assets/GUI1.png" width="80%">
@@ -159,6 +161,9 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 <br><br>
 <img src="assets/GUI3.png" width="80%">
 </div>
+
+## **Well ! I am not publishing the GUI for now but if any dev wants any reverence feel free to contact me**
+
 
 # **WHY DRONZER NEEDED TO BE DEVELOPED??**
 ***The evolution of modern cybersecurity education required a tool that could visualize complex vulnerabilities in real-time, which is precisely why DRONZER was conceived. While the internet is filled with outdated software, DRONZER stands alone as a functional bridge for understanding mobile security on the latest operating systems. By utilizing DRONZER, users can witness the intricate mechanics of remote access, transforming abstract threats into a tangible, high-tech interface. Ultimately, DRONZER serves as a vital proof of concept, proving that awareness is the only true defense against the sophisticated digital architecture that DRONZER was designed to expose.***
