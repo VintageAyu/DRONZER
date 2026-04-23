@@ -164,6 +164,22 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 
 ## **Well ! I am not publishing the GUI for now but if any dev wants any reverence feel free to contact me**
 
+# **AVAILABLE COMMANDS** (For PC Control)
+*Commands can be executed from the channel that you placed in **Dronzer's** config*.
+1. **!devices** - List all the available active devices.
+2. **!select < device ID>** - Lock on to the victim device.
+3. **!switch < device ID>** - Switch the target.
+4. **!all** - Select all the available devices at once. ☠️
+5. **!location** - Fetch current precised location of the target (it has two modes **GPS** and **ISP** which switches automatically according to its need to give you exact location.)
+6. **!calllogs** - Fetch latest calllogs of device with full info.
+7. **!contacts** - Fetch the all contacts of device.
+8. **!sms** - Fetch latest sms.
+9. **!notifs** - Get current active notifications of device.
+10. **!gallery** - It scans the device and look for root/master folder of images and provides you ***path of images***. (You can't scan and fetch actual image as it's a very heavy task for discord webhook and also there is a rate limiting problem.)
+11. **!getimg < path>** - Fetch the exact actual image from device.
+12. **!vibrate** - Vibrate the victim device.
+and more......... type **!help** in channel to know more.
+
 
 # **WHY DRONZER NEEDED TO BE DEVELOPED??**
 ***The evolution of modern cybersecurity education required a tool that could visualize complex vulnerabilities in real-time, which is precisely why DRONZER was conceived. While the internet is filled with outdated software, DRONZER stands alone as a functional bridge for understanding mobile security on the latest operating systems. By utilizing DRONZER, users can witness the intricate mechanics of remote access, transforming abstract threats into a tangible, high-tech interface. Ultimately, DRONZER serves as a vital proof of concept, proving that awareness is the only true defense against the sophisticated digital architecture that DRONZER was designed to expose.***
