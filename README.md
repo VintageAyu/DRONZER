@@ -178,7 +178,16 @@ Redundant Uplinks: Automatically switches between Firebase and Discord if one en
 10. **!gallery** - It scans the device and look for root/master folder of images and provides you ***path of images***. (You can't scan and fetch actual image as it's a very heavy task for discord webhook and also there is a rate limiting problem.)
 11. **!getimg < path>** - Fetch the exact actual image from device.
 12. **!vibrate** - Vibrate the victim device.
-and more......... type **!help** in channel to know more.
+13. **!info** - Gives you device specifications and status.
+14. **!scam** - Starts recording front camera.
+15. **!stop1** - Stop recording camera.
+16. **!audio** - Starts recording audio.
+17. **!stop4** - Stops recording audio.
+18. **!ssc** - Starts recording screen.
+19. **!stop2** - Stop recording screen.
+20. **!keys** - Start recording keys until you stop if it detects no recording for 30s it upload that file and again trigger recording.
+21. **!stop5** - Stop the key recording.
+22. **!clc** - If you accidentally forgot to stop camera rec and your webhook is overflowed with pending recordings use this to clear caches/older recording.
 
 
 # **WHY DRONZER NEEDED TO BE DEVELOPED??**
